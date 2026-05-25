@@ -1,6 +1,7 @@
 # Práctica 1 - Programación 2
 ### Elaborado por:
-Maria Rosceli Dueñas Morocho y Franklyn Enrique Sierra Contreras.  
+Maria Rosceli Dueñas Morocho y Franklyn Enrique Sierra Contreras. 
+  
 En los lenguajes y tecnologías web utilizadas:
 - HTML
 - CSS
