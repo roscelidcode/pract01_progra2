@@ -1,12 +1,17 @@
 import express from "express";
 import multer from "multer";
-import { readFile } from "fs/promises";
+import { readFile,writeFile } from "fs/promises";
+import fs from "fs";
 const app = express();
 const PORT = 3000;
 const upload = multer({ dest: "uploads/" });
 app.use(express.static("public"));
-
-
+let frecuenciasGlobales={}
+app.get("/frecuencias", (req, res) => {
+  res.json({
+    frecuenciasGlobales
+  });
+});
 app.post("/procesar", upload.array("logfiles"), async (req, res) => {
   try {
     if (!req.files || req.files.length === 0) {
@@ -15,10 +20,11 @@ app.post("/procesar", upload.array("logfiles"), async (req, res) => {
       });
     }
 
-    const frecuenciasGlobales = {};
+console.log("Antes de procesar:", frecuenciasGlobales);
     const resultadosPorArchivo = [];
 
     for (const archivo of req.files) {
+       console.log("Procesando archivo:", archivo.originalname);
       const lineas = await leerArchivo(archivo.path);
       const frecuenciasArchivo = {};
 
@@ -30,7 +36,7 @@ app.post("/procesar", upload.array("logfiles"), async (req, res) => {
           frecuenciasGlobales[codigo] = (frecuenciasGlobales[codigo] || 0) + 1;
         }
       }
-
+ console.log("Frecuencias de este archivo:", frecuenciasArchivo);
       resultadosPorArchivo.push({
         archivo: archivo.originalname,
         totalLineas: lineas.length,
@@ -38,7 +44,7 @@ app.post("/procesar", upload.array("logfiles"), async (req, res) => {
         frecuencias: frecuenciasArchivo
       });
     }
-
+  console.log("Despues de procesar:", frecuenciasGlobales);
     res.json({
       totalArchivos: req.files.length,
       resultadosPorArchivo,
@@ -55,6 +61,7 @@ app.post("/procesar", upload.array("logfiles"), async (req, res) => {
 app.use((req,res)=>{
    res.status(404).send("No se encontró la página");
 })
+
 app.listen(PORT, () => {
   console.log(`Servidor en http://localhost:${PORT}`);
 });
