@@ -13,7 +13,7 @@ async function frecuenciaFuncion() {
 const initApp =async () => {
   const droparea = document.querySelector(".droparea");
   if (!droparea) return;
-
+const btnTop = document.getElementById("btnTop");
   const active = () => droparea.classList.add("green-border");
   const inactivo = () => droparea.classList.remove("green-border");
   const prevents = (e) => e.preventDefault();
@@ -40,6 +40,9 @@ const initApp =async () => {
   if (btnBuscarCodigo) {
     btnBuscarCodigo.addEventListener("click", consultarFrecuencia);
   }
+  if (btnTop) {
+  btnTop.addEventListener("click", mostrarTop5);
+}
 await frecuenciaFuncion();
 
 };
@@ -72,6 +75,32 @@ function consultarFrecuencia(){
    
   
 }
+function  mostrarTop5(){
+    const top5Box = document.getElementById("top5Box");
+  const top5List = document.getElementById("top5List");
+  const entradas= Object.entries(frecuenciasGlobales);
+  entradas.sort((a,b)=>{
+    const valor1=a[1];
+    const valor2=b[1]
+    return valor2-valor1;
+  })
+  const primeros = entradas.slice(0, 5);
+ top5List.innerHTML = "";
+if(primeros.length===0){
+  top5Box.innerHTML="<li>No se cargo incidentes</li>"
+  top5Box.classList.remove("hidden")
+  return;
+}
+for(let i=0; i<primeros.length;i++){
+  const item=primeros[i];
+  const cantidad=item[1];
+  const codigo=item[0]
+  const li=document.createElement("li")
+  li.textContent=`${codigo}:  ${cantidad}`
+  top5List.appendChild(li)
+}
+top5Box.classList.remove("hidden")
+}
 document.addEventListener("DOMContentLoaded", initApp);
 
 const handleDrop = async (e) => {
@@ -99,7 +128,7 @@ const handleDrop = async (e) => {
   });
   const data = await res.json();
 frecuenciasGlobales = data.frecuenciasGlobales  || {};
-
+mostrarTop5();
    loader.classList.add("hidden");
     menu.classList.remove("hidden");
    //   droparea.classList.add("hidden")
