@@ -1,45 +1,73 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es"> <!-- Idioma español -->
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
-        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <meta charset="UTF-8"> <!-- Codificación de caracteres -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Configuración para dispositivos móviles -->
     <link rel="stylesheet" href="main.css">
     <script src="/main.js" defer></script>
-    <title>Document</title>
+    <link rel="icon" href="img/logo.png"> <!-- Icono de la página -->
+    <title>CyberShield</title>
 </head>
 
 <body>
     <main>
-        <section id='droparea' class="droparea ">
-            <i class="far fa-images"></i>
-            <p>Arrastra tu archivo .log aqui!</p>
-        </section>
-        <section id="loader" class="loader hidden">
-            <div class="spinner"></div>
-            <p>Procesando archivo...</p>
-        </section>
-        <section id="menu" class="menu ">
-            <h2>Menú</h2>
-            <button id="btnFrecuencia">Consultar frecuencia</button>
         
-            <button id="btnTop">Top 5</button>
-            <button id="btnReporte">Generar reporte</button>
-            <pre id="salida"></pre>
+        <!-- Sección izquierda con el logo, título y menú -->
+        <section class="izquierda">
+            <!-- Encabezado de la página -->
+            <img src="img/logo.png" class="logo">
+            <h1 class="titulo">CyberShield</h1>
+            <p class="miniTitulo">Monitoreo de incidentes</p>
+            
+            <!-- Menú de opciones para el usuario -->
+            <section id="menu" class="menu">
+                <h2 class="tituloMenu">Menú</h2>
+                <ol>
+                    <li><button id="btnFrecuencia">Consultar frecuencia</button></li>
+                    <li><button id="btnTop">Top 5</button></li>
+                    <li><button id="btnReporte">Generar reporte</button></li>
+                </ol>
+            </section>
         </section>
-        <section id="top5Box" class="hidden">
-            <h2>Top 5 de incidentes</h2>
-            <ul id="top5List"></ul>
-        </section>
+        
+        <hr>
+
+        <!-- Sección derecha con el área de arrastre, resultados y top 5 -->
+        <section class="derecha">
+            <!-- Área de arrastre para subir archivos .log -->
+            <h2 class="arrastra">Arrastra tu archivo .log aquí</h2>
+            <img class="flecha" src="img/flecha.jpg">
+            <section id='droparea' class="droparea">
+                <img src="img/nube.png" class="nube">
+                <p>Suelta tu archivo aquí</p>
+            </section>
+
+            <!-- Sección de carga con spinner -->
+            <section id="loader" class="loader hidden">
+                <div class="spinner"></div>
+                <p>Procesando archivo...</p>
+            </section>
             <div id="busquedaBox" class="busquedaBox hidden">
                 <input type="text" id="inputCodigo" placeholder="Escribe un código, por ejemplo ERR_404">
                 <button id="btnBuscarCodigo">Buscar</button>
                 <p id="resultadoBusqueda"></p>
             </div>
+
+             <!-- Sección para mostrar el top 5 de incidentes y la salida -->
+            <section id="top5Box" class="hidden">
+                <h2>Top 5 de incidentes</h2>
+                <ul id="top5List"></ul>
+            </section>
+            <pre id="salida"></pre>
+        </section>
+        
     </main>
+
+    <footer>
+        <p class="derechos">&copy; 2026 CyberShield. Derechos reservados. Franklyn Sierra & Rosceli Dueñas.</p>
+    </footer>
+
 </body>
 
 </html>
