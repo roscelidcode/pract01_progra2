@@ -20,6 +20,8 @@ app.get("/frecuencias", (req, res) => {
     frecuenciasGlobales,
   });
 });
+//parte dos de la practica
+//procesar los archivos
 app.post("/procesar", upload.array("logfiles"), async (req, res) => {
   try {
     if (!req.files || req.files.length === 0) {
@@ -28,11 +30,11 @@ app.post("/procesar", upload.array("logfiles"), async (req, res) => {
       });
     }
 
-    console.log("Antes de procesar:", frecuenciasGlobales);
+  //se agrega un array vacio para luego agregar los valores de los archivos
     const resultadosPorArchivo = [];
-
+//se busca cada archivo de forma independiente 
     for (const archivo of req.files) {
-      console.log("Procesando archivo:", archivo.originalname);
+//se lee el archivo en la ruta establecida 
       const lineas = await leerArchivo(archivo.path);
       const frecuenciasArchivo = {};
 
@@ -40,11 +42,13 @@ app.post("/procesar", upload.array("logfiles"), async (req, res) => {
         const codigo = extraerCodigo(linea);
 
         if (codigo) {
+          //ve cuantas veces aparece un error y lo suma
           frecuenciasArchivo[codigo] = (frecuenciasArchivo[codigo] || 0) + 1;
+          //incrementa la frecuencia global
           frecuenciasGlobales[codigo] = (frecuenciasGlobales[codigo] || 0) + 1;
         }
       }
-      console.log("Frecuencias de este archivo:", frecuenciasArchivo);
+   
       resultadosPorArchivo.push({
         archivo: archivo.originalname,
         totalLineas: lineas.length,
@@ -52,6 +56,9 @@ app.post("/procesar", upload.array("logfiles"), async (req, res) => {
         frecuencias: frecuenciasArchivo,
       });
     }
+
+    //punto 3 de la practica  en la funcion guardar despaldo
+    
      await guardarRespaldo();
     res.json({
       totalArchivos: req.files.length,
@@ -73,6 +80,7 @@ app.use((req, res) => {
 app.listen(PORT, () => {
   console.log(`Servidor en http://localhost:${PORT}`);
 });
+//me separa cada linea de error por separado por la ruta del archivo
 async function leerArchivo(ruta) {
   const contenido = await readFile(ruta, "utf8");
   return contenido.split(/\r?\n/);
@@ -86,6 +94,10 @@ function extraerCodigo(linea) {
     return null;
   }
 }
+//parte 3 de la practica
+//se guarda los datos 
 async function guardarRespaldo() {
+  //conviero el objeto en un texto json en el archivo res.json
+  
   await writeFile('res.json', JSON.stringify(frecuenciasGlobales, null, 2), "utf8");
 }

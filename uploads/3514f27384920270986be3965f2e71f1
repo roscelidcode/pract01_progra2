@@ -1,0 +1,10 @@
+2026-05-21 10:15:02 ERR_AUTH_FAIL Usuario admin rechazado
+2026-05-21 10:15:08 ERR_404 Recurso no encontrado
+2026-05-21 10:15:15 ERR_FIREWALL_DENIED Tráfico bloqueado
+2026-05-21 10:15:20 SAFE_HEARTBEAT Ping correcto
+2026-05-21 10:15:29 ERR_DB_CONN Timeout hacia la base de datos
+2026-05-21 10:15:35 ERR_AUTH_FAIL Intento fallido desde IP 10.0.0.24
+2026-05-21 10:15:42 INFO_ROTATION Rotación de llaves completada
+2026-05-21 10:15:50 ERR_AUTH_FAIL Usuario root rechazado
+2026-05-21 10:15:59 ERR_404 Ruta /admin no encontrada
+2026-05-21 10:16:10 ERR_FIREWALL_DENIED Puerto bloqueado
