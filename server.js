@@ -1,18 +1,29 @@
 import express from "express";
 import multer from "multer";
-import { readFile, writeFile } from "fs/promises";
+import { readFile, writeFile,appendFile } from "fs/promises";
 import fs from "fs";
 const app = express();
 const PORT = 3000;
 const upload = multer({ dest: "uploads/" });
 app.use(express.static("public"));
 let frecuenciasGlobales = {};
-if(fs.existsSync('res.json')){
+const EXCLUSIONES_SEGURAS = new Set(["OK_200", "INFO_LOG", "SUCCESS"]);
+
+function alertas(codigo){
+console.log(`Alerta de seguridad!!!!, el evento ${codigo} ha superado el umbral de 50 apariciones`)
+
+const mensaje = `Alerta de seguridad!!!! El evento '${codigo}' ha superado las 50 apariciones críticas.\n`;
+  appendFile("incidentes_criticos.log", mensaje, "utf8").catch(err => console.error(err));
+}
+
+
+
+if (fs.existsSync("res.json")) {
   try {
-    const contenido=await readFile('res.json','utf8');
-     frecuenciasGlobales = JSON.parse(contenido);
+    const contenido = await readFile("res.json", "utf8");
+    frecuenciasGlobales = JSON.parse(contenido);
   } catch (e) {
-    console.log(e)
+    console.log(e);
   }
 }
 app.get("/frecuencias", (req, res) => {
@@ -30,36 +41,40 @@ app.post("/procesar", upload.array("logfiles"), async (req, res) => {
       });
     }
 
-  //se agrega un array vacio para luego agregar los valores de los archivos
+    //se agrega un array vacio para luego agregar los valores de los archivos
     const resultadosPorArchivo = [];
-//se busca cada archivo de forma independiente 
+    //se busca cada archivo de forma independiente
     for (const archivo of req.files) {
-//se lee el archivo en la ruta establecida 
+      //se lee el archivo en la ruta establecida
       const lineas = await leerArchivo(archivo.path);
       const frecuenciasArchivo = {};
 
       for (const linea of lineas) {
         const codigo = extraerCodigo(linea);
 
-        if (codigo) {
+        if (codigo&& !EXCLUSIONES_SEGURAS.has(codigo)) {
           //ve cuantas veces aparece un error y lo suma
           frecuenciasArchivo[codigo] = (frecuenciasArchivo[codigo] || 0) + 1;
           //incrementa la frecuencia global
           frecuenciasGlobales[codigo] = (frecuenciasGlobales[codigo] || 0) + 1;
         }
+        if(frecuenciasGlobales[codigo]===51){
+          alertas(codigo);
+        }
       }
-   
+
       resultadosPorArchivo.push({
         archivo: archivo.originalname,
         totalLineas: lineas.length,
         totalCodigosDistintos: Object.keys(frecuenciasArchivo).length,
         frecuencias: frecuenciasArchivo,
       });
+       await fs.promises.unlink(archivo.path).catch(() => {});
     }
-await fs.promises.unlink(archivo.path).catch(() => {});
+   
     //punto 3 de la practica  en la funcion guardar despaldo
-    
-     await guardarRespaldo();
+
+    await guardarRespaldo();
     res.json({
       totalArchivos: req.files.length,
       resultadosPorArchivo,
@@ -95,9 +110,13 @@ function extraerCodigo(linea) {
   }
 }
 //parte 3 de la practica
-//se guarda los datos 
+//se guarda los datos
 async function guardarRespaldo() {
   //conviero el objeto en un texto json en el archivo res.json
-  
-  await writeFile('res.json', JSON.stringify(frecuenciasGlobales, null, 2), "utf8");
+
+  await writeFile(
+    "res.json",
+    JSON.stringify(frecuenciasGlobales, null, 2),
+    "utf8",
+  );
 }
