@@ -15,7 +15,9 @@ async function frecuenciaFuncion() {
 const initApp =async () => {
   const droparea = document.querySelector(".droparea");
   if (!droparea) return;
-const btnTop = document.getElementById("btnTop");
+  const btnTop = document.getElementById("btnTop");
+  const btnReporte = document.getElementById("btnReporte");
+  const btnCerrarFrecuencia = document.getElementById("btnCerrarFrecuencia");
   const active = () => droparea.classList.add("green-border");
   const inactivo = () => droparea.classList.remove("green-border");
   const prevents = (e) => e.preventDefault();
@@ -34,16 +36,23 @@ const btnTop = document.getElementById("btnTop");
   droparea.addEventListener("drop", handleDrop);
   const btnFrecuencia = document.getElementById("btnFrecuencia");
   const btnBuscarCodigo = document.getElementById("btnBuscarCodigo");
-const btnReporte= document.getElementById("btnReporte");
+
   if (btnFrecuencia) {
     btnFrecuencia.addEventListener("click", mostrarBuscador);
   }
-  if(btnReporte){
-     btnReporte.addEventListener("click", generarReporte);
+ if (btnReporte) {
+    btnReporte.addEventListener("click", () => {
+      mostrarReporte(); 
+      generarReporte(); 
+    });
   }
 
   if (btnBuscarCodigo) {
     btnBuscarCodigo.addEventListener("click", consultarFrecuencia);
+  }
+
+  if (btnCerrarFrecuencia) {
+  btnCerrarFrecuencia.addEventListener("click",ocultarResultados);
   }
   if (btnTop) {
   btnTop.addEventListener("click", mostrarTop5);
@@ -53,8 +62,8 @@ await frecuenciaFuncion();
 };
 
 function mostrarBuscador() {
-
-  const busquedaBox = document.querySelector(".busquedaBox");
+  ocultarResultados();
+  const busquedaBox = document.getElementById("busquedaBox");
   busquedaBox.classList.remove("hidden");
 }
 
@@ -98,6 +107,21 @@ function generarReporte(){
   a.click();
 
   URL.revokeObjectURL(url);
+  }
+//oculta los demas botones
+function ocultarResultados() {
+  const busquedaBox = document.getElementById("busquedaBox");
+  const top5Box = document.getElementById("top5Box");
+  const reporteBox = document.getElementById("reporteBox");
+  const inputCodigo = document.getElementById("inputCodigo");
+  
+  const resultadoBusqueda = document.getElementById("resultadoBusqueda");
+  inputCodigo.value = "";
+  resultadoBusqueda.textContent = "";
+  
+  busquedaBox.classList.add("hidden");
+  top5Box.classList.add("hidden");
+  reporteBox.classList.add("hidden");
 }
 
 //parte 5 de la guia 
@@ -105,7 +129,7 @@ function generarReporte(){
 function consultarFrecuencia(){
   //se busca los elementos html, los id 
   const input=document.getElementById('inputCodigo');
-   const resultado=document.getElementById('resultadoBusqueda');
+  const resultado=document.getElementById('resultadoBusqueda');
  
 //lo que quiero es que me elimina los espacios al principio y al final del input
 //y ademas colocar todo en mayuscula para facilitar la busqueda
@@ -124,16 +148,15 @@ function consultarFrecuencia(){
       resultado.textContent= `el codigo que ingresaste ${codigo} aparece un total de ${frecuencia}`;
     }else{
         resultado.textContent= `el codigo que ingresaste ${codigo}  no fue encontrado`
-    }
-   
-  
+    } 
 }
 
 //parte 5 de la guia 
 //seccion: logica de mostrar top 5
 function  mostrarTop5(){
+  ocultarResultados();
   //se buca los id de los elementos a utilizar
-    const top5Box = document.getElementById("top5Box");
+  const top5Box = document.getElementById("top5Box");
   const top5List = document.getElementById("top5List");
   //las entradas son los objetos clave-valor 
   //ejemplo, err_404: 2
@@ -171,6 +194,13 @@ for(let i=0; i<primeros.length;i++){
 }
 top5Box.classList.remove("hidden")
 }
+
+// mostrar reporte
+function mostrarReporte(){
+  ocultarResultados();
+  const reporteBox = document.getElementById("reporteBox");
+  reporteBox.classList.remove("hidden");
+}
 document.addEventListener("DOMContentLoaded", initApp);
 
 
@@ -205,7 +235,7 @@ const handleDrop = async (e) => {
   });
   //se espera el resultado 
   const data = await res.json();
-  //si eciste resultado del back, se actualiza frecuencias, si no no se muestra nada
+  //si existe resultado del back, se actualiza frecuencias, si no no se muestra nada
 frecuenciasGlobales = data.frecuenciasGlobales  || {};
 
   

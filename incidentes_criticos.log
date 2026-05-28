@@ -1,2 +1,2 @@
-
-Alerta de seguridad!!!! El evento 'ERR_CONN_TIMEOUT' ha superado las 50 apariciones críticas.
+Alerta de seguridad!!!! El evento 'ERR_AUTH_FAIL' ha superado las 50 apariciones críticas.
+Alerta de seguridad!!!! El evento 'ERR_404' ha superado las 50 apariciones críticas.
