@@ -56,7 +56,7 @@ app.post("/procesar", upload.array("logfiles"), async (req, res) => {
         frecuencias: frecuenciasArchivo,
       });
     }
-
+await fs.promises.unlink(archivo.path).catch(() => {});
     //punto 3 de la practica  en la funcion guardar despaldo
     
      await guardarRespaldo();

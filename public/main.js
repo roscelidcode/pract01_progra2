@@ -34,9 +34,12 @@ const btnTop = document.getElementById("btnTop");
   droparea.addEventListener("drop", handleDrop);
   const btnFrecuencia = document.getElementById("btnFrecuencia");
   const btnBuscarCodigo = document.getElementById("btnBuscarCodigo");
-
+const btnReporte= document.getElementById("btnReporte");
   if (btnFrecuencia) {
     btnFrecuencia.addEventListener("click", mostrarBuscador);
+  }
+  if(btnReporte){
+     btnReporte.addEventListener("click", generarReporte);
   }
 
   if (btnBuscarCodigo) {
@@ -53,6 +56,48 @@ function mostrarBuscador() {
 
   const busquedaBox = document.querySelector(".busquedaBox");
   busquedaBox.classList.remove("hidden");
+}
+
+//punto 5 generar reporte
+function generarReporte(){
+     const entradasValores=Object.entries(frecuenciasGlobales);
+     let incidentes=0;
+      for(const item of entradasValores){
+    incidentes += item[1];
+  }
+  entradasValores.sort((a,b)=>{
+  const valor1=a[0];
+    const valor2=b[0]
+    return valor1.localeCompare(valor2);
+  })
+
+  const fecha =new Date().toLocaleString();
+  let reporte ="";
+    reporte += "===== REPORTE DE INCIDENTES =====\n\n";
+
+  reporte += `Fecha: ${fecha}\n`;
+  reporte += `Total codigos distintos: ${entradasValores.length}\n`;
+  reporte += `Total incidentes: ${incidentes}\n\n`;
+
+  reporte += "===== FRECUENCIAS =====\n";
+
+  for(const item of entradasValores){
+    reporte += `${item[0]} : ${item[1]}\n`;
+  }
+
+    const blob = new Blob([reporte], { type: "text/plain" });
+
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+
+  a.href = url;
+
+  a.download = "reporte_incidentes.txt";
+
+  a.click();
+
+  URL.revokeObjectURL(url);
 }
 
 //parte 5 de la guia 
