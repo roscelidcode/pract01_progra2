@@ -5,7 +5,7 @@
     <meta charset="UTF-8"> <!-- Codificación de caracteres -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Configuración para dispositivos móviles -->
     <link rel="stylesheet" href="main.css">
-    <script src="/main.js" defer></script>
+    <script src="main.js" defer></script>
     <link rel="icon" href="img/logo.png"> <!-- Icono de la página -->
     <title>CyberShield</title>
 </head>
@@ -25,7 +25,7 @@
                 <h2 class="tituloMenu">Menú</h2>
                 <ol>
                     <li><button id="btnFrecuencia">Consultar frecuencia</button></li>
-                    <li><button id="btnTop">Top 5</button></li>
+                    <li><button id="btnTop">Top 5 incidentes</button></li>
                     <li><button id="btnReporte">Generar reporte</button></li>
                 </ol>
             </section>
@@ -43,20 +43,43 @@
                 <p>Suelta tu archivo aquí</p>
             </section>
 
-            <!-- Sección de carga con spinner -->
+            <!-- Mostrar resultados -->
+            <section class="resultados">
+            
+                <!-- Buscar frecuencia -->
+                <div id="busquedaBox" class="hidden">
+                    <h2 class="tituloBusqueda" >Consultar frecuencia</h2>
+                    <h3 class="tituloErrores">Tipos de errores detectados:</h3>
+                    <ol class="listaErrores">
+                        <li>ERR_AUTH_FAIL</li>
+                        <li>ERR_404</li>
+                        <li>ERR_FIREWALL_DENIED</li>
+                        <li>ERR_DB_CONN</li>
+                        <li>SAFE_HEARTBEAT</li>
+                    </ol>
+                    <input type="text" id="inputCodigo" placeholder="Escribe un tipo de error...">
+                    <button id="btnBuscarCodigo">Buscar</button>
+                    <button id="btnCerrarFrecuencia">Salir</button>
+                    <p id="resultadoBusqueda"></p>
+                </div>
 
-            <div id="busquedaBox" class="busquedaBox hidden">
-                <input type="text" id="inputCodigo" placeholder="Escribe un código, por ejemplo ERR_404">
-                <button id="btnBuscarCodigo">Buscar</button>
-                <p id="resultadoBusqueda"></p>
-            </div>
-
-             <!-- Sección para mostrar el top 5 de incidentes y la salida -->
+            <!-- Top 5 -->
             <section id="top5Box" class="hidden">
                 <h2>Top 5 de incidentes</h2>
                 <ul id="top5List"></ul>
             </section>
-            <pre id="salida"></pre>
+
+            <!-- Reporte -->
+            <section id="reporteBox" class="hidden">
+                 <h2>Reporte generado</h2>
+                <p>El reporte de auditoría fue generado correctamente.</p>
+            </section>
+            
+            <!-- Salida / reporte -->
+            <pre id="salida" class="hidden"></pre>
+
+            </section>
+
         </section>
         
     </main>
